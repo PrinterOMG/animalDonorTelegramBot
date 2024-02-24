@@ -44,8 +44,6 @@ async def link_telegram(message: Message, config: Config, state: FSMContext):
         async with session.post(url) as response:
             if response.status != 204:
                 await message.answer('Ой! Что-то пошло не так...',  reply_markup=ReplyKeyboardRemove())
-                await message.answer(await response.text())
-                await message.answer(str(response.status))
                 await state.clear()
                 return
 

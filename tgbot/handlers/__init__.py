@@ -1,5 +1,5 @@
-from .commands import commands_router
+from .main import router
 
 routers = (
-    commands_router,
+    router,
 )

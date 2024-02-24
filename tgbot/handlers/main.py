@@ -16,7 +16,6 @@ router = Router(name='commands')
 @router.message(CommandStart(deep_link=True))
 async def command_start(message: Message, command: CommandObject, state: FSMContext):
     args = command.args
-    await message.answer(f"Your payload: {args}")
     await message.answer(
         'Это бот DonorSearch pet.\n\n'
         'Нажмите кнопку "Поделиться номером" чтобы подтвердить ваш номер телефона и привязать Telegram',
@@ -45,6 +44,10 @@ async def link_telegram(message: Message, config: Config, state: FSMContext):
         async with session.post(url) as response:
             if response.status != 204:
                 await message.answer('Ой! Что-то пошло не так...',  reply_markup=ReplyKeyboardRemove())
+                await message.answer(await response.text())
+                await message.answer(str(response.status))
+                await state.clear()
+                return
 
     await message.answer('Ура! Номер телефона подтверждён и Telegram привязан!', reply_markup=ReplyKeyboardRemove())
     await message.answer('Можете вернуться на сайт')
